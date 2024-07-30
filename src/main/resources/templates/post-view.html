@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Post View</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<h4>want to contribute?</h4>
+<a href="/contribution">Contribute</a>
+
+<h1>Post Details</h1>
+<div>
+    <label>Question:</label>
+    <span th:text="${post.question}"></span>
+</div>
+<div>
+    <label>Answer:</label>
+    <span th:text="${post.answer}"></span>
+</div>
+<div>
+    <label>Difficulty:</label>
+    <span th:text="${post.difficulty}"></span>
+</div>
+<div>
+    <label>Category:</label>
+    <span th:text="${post.category}"></span>
+</div>
+<div>
+    <label>Like:</label>
+    <span th:text="${post.like}"></span>
+</div>
+<div>
+    <label>Dislike:</label>
+    <span th:text="${post.dislike}"></span>
+</div>
+</body>
+</html>
