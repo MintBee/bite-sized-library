@@ -3,35 +3,68 @@
 <head>
     <title>Post View</title>
     <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
 </head>
 <body>
-<h4>want to contribute?</h4>
-<a href="/contribution">Contribute</a>
+<div class="container">
+    <h4 class="text-center">Want to contribute?</h4>
+    <a href="/contribution" class="btn btn-primary d-block mx-auto mb-4">Contribute</a>
 
-<h1>Post Details</h1>
-<div>
-    <label>Question:</label>
-    <span th:text="${post.question}"></span>
+    <h1 class="text-center">Post Details</h1>
+    <div class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                <span class="badge bg-light text-dark d-inline-block me-3" th:text="${post.difficulty}"></span>
+                <span class="badge bg-light text-dark d-inline-block" th:text="${post.category}"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Question:</label>
+                <span th:text="${post.question}"></span>
+            </div>
+
+            <div>
+                <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#answerSection" aria-expanded="false" aria-controls="answerSection" id="unfoldButton">Unfold</button>
+            </div>
+
+            <div id="answerSection" class="collapse">
+                <div class="mb-3">
+                    <label class="form-label">Answer:</label>
+                    <span th:text="${post.answer}"></span>
+                </div>
+                <div class="mb-3" th:if="${!#strings.isEmpty(post.answerReference)}">
+                    <label class="form-label">Reference:</label>
+                    <span th:text="${post.answerReference}"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Like:</label>
+                <span th:text="${post.like}"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Dislike:</label>
+                <span th:text="${post.dislike}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="/random-post" class="btn btn-secondary">Dive into another question!</a>
+    </div>
 </div>
-<div>
-    <label>Answer:</label>
-    <span th:text="${post.answer}"></span>
-</div>
-<div>
-    <label>Difficulty:</label>
-    <span th:text="${post.difficulty}"></span>
-</div>
-<div>
-    <label>Category:</label>
-    <span th:text="${post.category}"></span>
-</div>
-<div>
-    <label>Like:</label>
-    <span th:text="${post.like}"></span>
-</div>
-<div>
-    <label>Dislike:</label>
-    <span th:text="${post.dislike}"></span>
-</div>
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('unfoldButton').addEventListener('click', function() {
+        var button = this;
+        var answerSection = document.getElementById('answerSection');
+        answerSection.addEventListener('shown.bs.collapse', function () {
+            button.textContent = 'Fold';
+        });
+        answerSection.addEventListener('hidden.bs.collapse', function () {
+            button.textContent = 'Unfold';
+        });
+    });
+</script>
 </body>
 </html>

@@ -6,11 +6,15 @@ import groonvail.example.bitesizedlibrary.qna.Post;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ContributionDto {
     @NotBlank
     @Size(max = 500)
@@ -21,6 +25,7 @@ public class ContributionDto {
     private String answer;
 
     private String answerReference;
+
     @NotNull
     private Difficulty difficulty;
     @NotNull

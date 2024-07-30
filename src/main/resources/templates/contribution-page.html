@@ -3,36 +3,53 @@
 <head>
     <title>QnA Contribution Page</title>
     <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
 </head>
 <body>
-<h1>QnA Contribution Page</h1>
-<form action="/contribution" method="post" th:object="${contributionDto}">
-    <label for="question">Question</label>
-    <input type="text" id="question" name="question" th:field="*{question}" required/>
+<div class="container">
+    <h1 class="text-center">QnA Contribution Page</h1>
+    <form action="/contribution" method="post" th:object="${contributionDto}" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="question" class="form-label">Question</label>
+            <input type="text" id="question" name="question" th:field="*{question}" class="form-control" required/>
+        </div>
 
-    <label for="answer">Answer</label>
-    <input type="text" id="answer" name="answer" th:field="*{answer}" required/>
+        <div class="mb-3">
+            <label for="answer" class="form-label">Answer</label>
+            <input type="text" id="answer" name="answer" th:field="*{answer}" class="form-control" required/>
+        </div>
 
-    <label for="difficulty">Difficulty</label>
-    <select id="difficulty" name="difficulty" th:field="*{difficulty}">
-        <option th:value="STUDENT">Student</option>
-        <option th:value="JUNIOR">Junior</option>
-        <option th:value="INTERMEDIATE">Intermediate</option>
-        <option th:value="SENIOR">Senior</option>
-    </select>
+        <div class="mb-3">
+            <label for="answerReference" class="form-label">Answer Reference (optional)</label>
+            <input type="text" id="answerReference" name="answerReference" th:field="*{answerReference}" class="form-control"/>
+        </div>
 
-    <label for="category">Category</label>
-    <select id="category" name="category" th:field="*{category}">
-        <option th:value="GENERAL">General</option>
-        <option th:value="BACKEND">Backend</option>
-        <option th:value="FRONTEND">Frontend</option>
-        <option th:value="GAME">Game</option>
-        <option th:value="INFRASTRUCTURE">Infrastructure</option>
-        <option th:value="DATA_SCIENCE">Data Science</option>
-    </select>
+        <div class="mb-3">
+            <label for="difficulty" class="form-label">Difficulty</label>
+            <select id="difficulty" name="difficulty" th:field="*{difficulty}" class="form-select">
+                <option th:value="STUDENT">Student</option>
+                <option th:value="JUNIOR">Junior</option>
+                <option th:value="INTERMEDIATE">Intermediate</option>
+                <option th:value="SENIOR">Senior</option>
+            </select>
+        </div>
 
-    <button type="submit">Submit</button>
-</form>
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select id="category" name="category" th:field="*{category}" class="form-select">
+                <option th:value="GENERAL">General</option>
+                <option th:value="BACKEND">Backend</option>
+                <option th:value="FRONTEND">Frontend</option>
+                <option th:value="GAME">Game</option>
+                <option th:value="INFRASTRUCTURE">Infrastructure</option>
+                <option th:value="DATA_SCIENCE">Data Science</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

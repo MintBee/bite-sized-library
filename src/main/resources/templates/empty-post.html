@@ -3,18 +3,20 @@
 <head>
     <title>No Post Found</title>
     <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
 </head>
 <body>
-<h1>No Post Found</h1>
-<p>Sorry, we couldn't find the post you were looking for.</p>
-<div>
-    <a href="/random-post">Try Again</a>
+<div class="container">
+    <hr>
+    <h1 class="text-center">No Post Found</h1>
+    <p>Sorry, we couldn't find the post you were looking for.</p>
+    <div class="d-flex justify-content-around">
+        <a href="/random-post" class="btn btn-primary">Try Again</a>
+        <a href="/contribution" class="btn btn-secondary">Can't find wanted post? Let's contribute!</a>
+        <a href="/" class="btn btn-info">Go to Home</a>
+    </div>
 </div>
-<div>
-    <a href="/contribution">Can't find wanted post? Let's contribute!</a>
-</div>
-<div>
-    <a href="/">Go to Home</a>
-</div>
+<script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
