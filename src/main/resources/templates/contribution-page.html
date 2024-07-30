@@ -28,22 +28,18 @@
         <div class="mb-3">
             <label for="difficulty" class="form-label">Difficulty</label>
             <select id="difficulty" name="difficulty" th:field="*{difficulty}" class="form-select">
-                <option th:value="STUDENT">Student</option>
-                <option th:value="JUNIOR">Junior</option>
-                <option th:value="INTERMEDIATE">Intermediate</option>
-                <option th:value="SENIOR">Senior</option>
+                <option th:each="difficulty : ${T(groonvail.example.bitesizedlibrary.qna.Difficulty).values()}"
+                        th:value="${difficulty}"
+                        th:text="${difficulty.displayName}"></option>
             </select>
         </div>
 
         <div class="mb-3">
             <label for="category" class="form-label">Category</label>
             <select id="category" name="category" th:field="*{category}" class="form-select">
-                <option th:value="GENERAL">General</option>
-                <option th:value="BACKEND">Backend</option>
-                <option th:value="FRONTEND">Frontend</option>
-                <option th:value="GAME">Game</option>
-                <option th:value="INFRASTRUCTURE">Infrastructure</option>
-                <option th:value="DATA_SCIENCE">Data Science</option>
+                <option th:each="category : ${T(groonvail.example.bitesizedlibrary.qna.Category).values()}"
+                        th:value="${category}"
+                        th:text="${category.displayName}"></option>
             </select>
         </div>
 

@@ -1,28 +1,57 @@
 package groonvail.example.bitesizedlibrary.infra;
 
+import com.querydsl.core.types.Predicate;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import groonvail.example.bitesizedlibrary.qna.Category;
+import groonvail.example.bitesizedlibrary.qna.Difficulty;
 import groonvail.example.bitesizedlibrary.qna.Post;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 import java.util.Random;
 
-@RequiredArgsConstructor
+import static com.querydsl.core.types.ExpressionUtils.count;
+import static groonvail.example.bitesizedlibrary.qna.QPost.post;
+
 public class PostRandomRepositoryImpl implements PostRandomRepository{
-    private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
+
+    public PostRandomRepositoryImpl(EntityManager em) {
+        this.queryFactory = new JPAQueryFactory(em);
+    }
 
     @Override
     public Optional<Post> findRandomPost(Random random) {
-        Long postCount = em.createQuery("select count(p) from Post p", Long.class)
-                .getSingleResult();
+        return findRandomPost(random, null, null);
+    }
+
+    @Override
+    public Optional<Post> findRandomPost(Random random, Difficulty difficulty, Category category) {
+        Long postCount = queryFactory.select(count(post))
+                .from(post)
+                .where(eqDifficulty(difficulty), eqCategory(category))
+                .fetchOne();
+        assert postCount != null;
         if (postCount == 0L) {
             return Optional.empty();
         }
 
         int randomIndex = random.nextInt(postCount.intValue());
-        return Optional.of(em.createQuery("select p from Post p", Post.class)
-                .setFirstResult(randomIndex)
-                .setMaxResults(1)
-                .getSingleResult());
+
+        Post foundPost = queryFactory.selectFrom(post)
+                .where(eqDifficulty(difficulty), eqCategory(category))
+                .offset(randomIndex)
+                .limit(1)
+                .fetchOne();
+        assert foundPost != null;
+        return Optional.of(foundPost);
+    }
+
+    private Predicate eqDifficulty(Difficulty difficulty) {
+        return difficulty == null ? null : post.difficulty.eq(difficulty);
+    }
+
+    private Predicate eqCategory(Category category) {
+        return category == null ? null : post.category.eq(category);
     }
 }

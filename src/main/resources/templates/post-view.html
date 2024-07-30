@@ -20,8 +20,8 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Question:</label>
-                <span th:text="${post.question}"></span>
+                <h2 class="h2">Q:</h2>
+                <div th:text="${post.question}"></div>
             </div>
 
             <div>
@@ -30,8 +30,8 @@
 
             <div id="answerSection" class="collapse">
                 <div class="mb-3">
-                    <label class="form-label">Answer:</label>
-                    <span th:text="${post.answer}"></span>
+                    <h2 class="h2">A:</h2>
+                    <div th:text="${post.answer}"></div>
                 </div>
                 <div class="mb-3" th:if="${!#strings.isEmpty(post.answerReference)}">
                     <label class="form-label">Reference:</label>
@@ -49,8 +49,29 @@
             </div>
         </div>
     </div>
+
     <div class="text-center mt-4">
-        <a href="/random-post" class="btn btn-secondary">Dive into another question!</a>
+        <div class="mb-3">
+            <label for="difficultySelect" class="form-label">Select Difficulty:</label>
+            <select id="difficultySelect" class="form-select" th:value="${difficulty}">
+                <option th:value="null" th:selected="(${param.difficulty} == null)">all</option>
+                <option th:each="difficulty : ${T(groonvail.example.bitesizedlibrary.qna.Difficulty).values()}"
+                        th:value="${difficulty}"
+                        th:selected="(${#strings.toString(param.difficulty) == difficulty.name()})"
+                        th:text="${difficulty.displayName}">Student</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="categorySelect" class="form-label">Select Category:</label>
+            <select id="categorySelect" th:name="categorySelect" class="form-select">
+                <option th:value="null" th:selected="(${param.category} == null)">all</option>
+                <option th:each="category : ${T(groonvail.example.bitesizedlibrary.qna.Category).values()}"
+                        th:value="${category}"
+                        th:selected="(${#strings.toString(param.category) == category.name()})"
+                        th:text="${category.displayName}">General</option>
+            </select>
+        </div>
+        <a href="#" class="btn btn-secondary" id="browseButton">Dive into another question!</a>
     </div>
 </div>
 <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
@@ -64,6 +85,24 @@
         answerSection.addEventListener('hidden.bs.collapse', function () {
             button.textContent = 'Unfold';
         });
+    });
+
+    document.getElementById('browseButton').addEventListener('click', function(event) {
+        event.preventDefault();
+        let difficulty = document.getElementById('difficultySelect').value;
+        let category = document.getElementById('categorySelect').value;
+        let url = '/random-post';
+        let params = [];
+        if (difficulty) {
+            params.push('difficulty=' + difficulty);
+        }
+        if (category) {
+            params.push('category=' + category);
+        }
+        if (params.length > 0) {
+            url += '?' + params.join('&');
+        }
+        window.location.href = url;
     });
 </script>
 </body>

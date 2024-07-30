@@ -3,6 +3,8 @@ package groonvail.example.bitesizedlibrary;
 import groonvail.example.bitesizedlibrary.contributor.ContributionDto;
 import groonvail.example.bitesizedlibrary.infra.PostRepository;
 import groonvail.example.bitesizedlibrary.learner.PostDto;
+import groonvail.example.bitesizedlibrary.qna.Category;
+import groonvail.example.bitesizedlibrary.qna.Difficulty;
 import groonvail.example.bitesizedlibrary.qna.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -30,5 +32,10 @@ public class PostService {
     @Transactional(readOnly = true)
     public Optional<PostDto> findRandomPost() {
         return postRepository.findRandomPost(random).map(PostDto::fromPost);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<PostDto> findRandomPost(Difficulty difficulty, Category category) {
+        return postRepository.findRandomPost(random, difficulty, category).map(PostDto::fromPost);
     }
 }
