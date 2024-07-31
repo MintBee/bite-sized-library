@@ -48,4 +48,12 @@ public class Post {
         this.like = like;
         this.dislike = dislike;
     }
+
+    public void like() {
+        this.like++;
+    }
+
+    public void dislike() {
+        this.dislike++;
+    }
 }

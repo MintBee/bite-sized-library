@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>Post View</title>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css}">
 </head>
 <body>
 <div class="container">
-    <h4 class="text-center">Want to contribute?</h4>
-    <a href="/contribution" class="btn btn-primary d-block mx-auto mb-4">Contribute</a>
+    <div>
+        <h4 class="text-center">새로운 Q&A를 추가하고 싶으신가요?</h4>
+        <a href="/contribution" class="btn btn-primary d-block mx-auto mb-4">기여하기</a>
+    </div>
 
-    <h1 class="text-center">Post Details</h1>
+
+    <h1 class="text-center">문제</h1>
     <div class="card">
         <div class="card-body">
             <div class="mb-3">
@@ -25,7 +29,7 @@
             </div>
 
             <div>
-                <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#answerSection" aria-expanded="false" aria-controls="answerSection" id="unfoldButton">Unfold</button>
+                <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#answerSection" aria-expanded="false" aria-controls="answerSection" id="unfoldButton">정답 보기</button>
             </div>
 
             <div id="answerSection" class="collapse">
@@ -39,20 +43,18 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Like:</label>
-                <span th:text="${post.like}"></span>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Dislike:</label>
-                <span th:text="${post.dislike}"></span>
+            <div class="mb-3" id="likeDiv">
+                <button class="btn btn-outline-primary" id="likeButton">
+                    <i class="bi bi-hand-thumbs-up">좋아요!</i>
+                    <span id="likeCount" th:text="${post.like}">0</span>
+                </button>
             </div>
         </div>
     </div>
 
     <div class="text-center mt-4">
         <div class="mb-3">
-            <label for="difficultySelect" class="form-label">Select Difficulty:</label>
+            <label for="difficultySelect" class="form-label">난이도를 선택하세요:</label>
             <select id="difficultySelect" class="form-select" th:value="${difficulty}">
                 <option th:value="null" th:selected="(${param.difficulty} == null)">all</option>
                 <option th:each="difficulty : ${T(groonvail.example.bitesizedlibrary.qna.Difficulty).values()}"
@@ -62,7 +64,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="categorySelect" class="form-label">Select Category:</label>
+            <label for="categorySelect" class="form-label">문제 카테고리를 선택하세요:</label>
             <select id="categorySelect" th:name="categorySelect" class="form-select">
                 <option th:value="null" th:selected="(${param.category} == null)">all</option>
                 <option th:each="category : ${T(groonvail.example.bitesizedlibrary.qna.Category).values()}"
@@ -71,7 +73,7 @@
                         th:text="${category.displayName}">General</option>
             </select>
         </div>
-        <a href="#" class="btn btn-secondary" id="browseButton">Dive into another question!</a>
+        <a href="#" class="btn btn-secondary" id="browseButton">다음 문제로 탐험하기</a>
     </div>
 </div>
 <script src="/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
@@ -80,10 +82,10 @@
         var button = this;
         var answerSection = document.getElementById('answerSection');
         answerSection.addEventListener('shown.bs.collapse', function () {
-            button.textContent = 'Fold';
+            button.textContent = '정답 가리기';
         });
         answerSection.addEventListener('hidden.bs.collapse', function () {
-            button.textContent = 'Unfold';
+            button.textContent = '정답 보기';
         });
     });
 
@@ -103,6 +105,36 @@
             url += '?' + params.join('&');
         }
         window.location.href = url;
+    });
+
+    document.getElementById('likeButton').addEventListener('click', function() {
+        let postId = [[${post.id}]];
+        fetch('/qna/' + postId + '/like', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(response => {
+            if(!response.ok) {
+                throw new Error('Failed to like the post');
+            }
+
+            let likes = document.getElementById('likeCount').textContent;
+            document.getElementById('likeCount').textContent = (parseInt(likes) + 1).toString();
+        }).catch(error => {
+            console.error(error);
+            if (document.getElementById('likeConflictMessageDiv')) {
+                return;
+            }
+
+            let likeConflictMessageDiv = document.createElement('div');
+            likeConflictMessageDiv.id = 'likeConflictMessageDiv';
+            let likeConflictMessage = document.createElement('span');
+            likeConflictMessage.textContent = '이미 좋아요를 눌렀습니다.';
+            likeConflictMessageDiv.appendChild(likeConflictMessage);
+
+            document.getElementById('likeDiv').appendChild(likeConflictMessageDiv);
+        });
     });
 </script>
 </body>
